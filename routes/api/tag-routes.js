@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
     const singleTagData =await  Tag.findByPk(req.params.id, {
       include: [{ model: Product }]
     });
-
+    console.log(singleTagData);
     if (!singleTagData) {
       res.status(404).json({ message: 'No tag was found with that id!' });
       return;
@@ -49,14 +49,18 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
-  Tag.update(req.body)
+  Tag.update(req.body, {
+    where : {
+      id: req.params.id
+    }
+  })
     .then((tag) => {
       res.status(200).json(tag);
     })
     .catch((err) => {
       console.log(err);
       res.status(400).json(err);
-    });
+  });
 });
 
 router.delete('/:id', async (req, res) => {
